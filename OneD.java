@@ -1,5 +1,6 @@
 package com.mycompany.testforfp;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
 
@@ -80,6 +81,27 @@ public class OneD {
             }
         }
         return false;
+    }
+    
+    public ArrayList<Entity> getRange(int x1, int y1, int x2, int y2) {
+        ArrayList<Entity> result = new ArrayList<>();
+
+        // Ensure coordinates are valid and ordered
+        int minX = Math.max(0, Math.min(x1, x2));
+        int maxX = Math.min(this.width - 1, Math.max(x1, x2));
+        int minY = Math.max(0, Math.min(y1, y2));
+        int maxY = Math.min(this.height - 1, Math.max(y1, y2));
+
+        // Scan through all entities and collect the ones in the range
+        for (Entity element : this.list) {
+            int ex = element.getX();
+            int ey = element.getY();
+            if (ex >= minX && ex <= maxX && ey >= minY && ey <= maxY) {
+                result.add(element);
+            }
+        }
+
+        return result;
     }
     
     public boolean move(int oldX, int oldY, int newX, int newY){

@@ -18,6 +18,10 @@ public class HashGrid {
     private int chunkSize = 256;
     private int entityCount = 0;
     
+    public HashGrid(int width, int height){
+        this.width = width;
+        this.height = height;
+    }
     public int getWidth(){
         return this.width * this.chunkSize;
     }
@@ -121,5 +125,36 @@ public class HashGrid {
         }
 
         return result;
+    }
+    
+    public boolean move(int oldX, int oldY, int newX, int newY){
+        long oldCx = oldX / chunkSize;
+        long oldCy = oldY / chunkSize;
+
+        if (!validate(oldCx, oldCy)) return false;
+
+        long oldKey = convert(oldCx, oldCy);
+
+        ArrayList<Entity> oldChunk = map.get(oldKey);
+
+        if (oldChunk == null) return false;
+
+        Iterator<Entity> it = oldChunk.iterator();
+
+        while (it.hasNext()){
+            Entity entity = it.next();
+            if (entity.getX() == oldX && entity.getY() == oldY){
+                it.remove();
+                this.entityCount--;
+
+                entity.setXY(newX, newY);
+
+                this.add(entity);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
